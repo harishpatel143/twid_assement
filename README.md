@@ -38,8 +38,8 @@ Serve Application in new terminal or create virtual host
     php -S localhost:8000 -t public
 
 
-There are two end point for fetch data from the URL
-1. Using command Line (Fastest but duplicate check is not implemented to unique key issue)
+## There are two end point for fetch data from the URL
+1. Using command Line (Fastest but duplicate check is not implemented due to unique key issue)
 2. Using Lumen Job Batching (Slow, inserted 1000 record in every batch. Added check for duplicate records).
     Need to run `php artisan queue:work` for this option
  
