@@ -2,32 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Event;
 use App\Events\FetchDataEvent;
-use App\Jobs\PinCodeProcess;
+use App\Events\FetchDataUsingCommandEvent;
 use App\Models\PinCode;
-use GuzzleHttp\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Http;
 use Yajra\Datatables\DataTables;
 
-
+/**
+ * Class for Manage Pin code fetch and listing feature
+ *
+ * Class PinCodeController
+ * @package App\Http\Controllers
+ */
 class PinCodeController extends Controller
 {
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Get listing
      * @param Request $request
@@ -48,17 +38,32 @@ class PinCodeController extends Controller
         return DataTables::of(PinCode::query())->make(true);
     }
 
+
+    /**
+     * Fetch details event using command.
+     *
+     * @return JsonResponse
+     */
+    public function fetchDetailsUsingCommand() {
+        event(new FetchDataUsingCommandEvent());
+
+        return response()->json([
+            'status' => Response::HTTP_OK,
+            'message' => 'Your request is being processed. Please wait for a while.',
+        ]);
+    }
+
     /**
      * Trigger fetch details event.
      *
      * @return JsonResponse
      */
-    public function fetchDetails() {
+    public function fetchDetailsUsingJob() {
         event(new FetchDataEvent());
 
         return response()->json([
             'status' => Response::HTTP_OK,
-            'message' => 'You request has been processing.',
+            'message' => 'Your request is being processed. Please wait for a while.',
         ]);
     }
 

@@ -23,7 +23,7 @@ class CreatePinCodesTable extends Migration
             $table->string('regionname');
             $table->string('circlename');
             $table->string('Taluk');
-            $table->string('DistrictName');
+            $table->string('Districtname');
             $table->string('statename');
             $table->timestamps();
         });

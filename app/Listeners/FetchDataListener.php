@@ -30,10 +30,10 @@ class FetchDataListener implements ShouldQueue
     public function handle(FetchDataEvent $event)
     {
         $url = 'http://data.gov.in/sites/default/files/all_india_pin_code.csv';
-        $filePath = base_path('public/test.csv');
+        $filePath = public_path('pin_code.csv');
         $contents = file_get_contents($url);
-        file_put_contents($filePath, $contents);
 
+        file_put_contents($filePath, $contents);
         $chunks = array_chunk(file($filePath),1000);
         $header = [];
         $batch  = Bus::batch([])->dispatch();
@@ -48,5 +48,6 @@ class FetchDataListener implements ShouldQueue
             }
             $batch->add(new PinCodeProcess($data, $header));
         }
+        unlink($filePath);
     }
 }

@@ -18,5 +18,8 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\FetchDataEvent::class => [
             \App\Listeners\FetchDataListener::class,
         ],
+        \App\Events\FetchDataUsingCommandEvent::class => [
+            \App\Listeners\FetchDataUsingCommandListener::class,
+        ],
     ];
 }

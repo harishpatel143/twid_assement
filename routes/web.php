@@ -18,4 +18,5 @@ $router->get('/', 'PinCodeController@index');
 $router->get('/list', 'PinCodeController@anyData');
 
 //Fetch data from URL
-$router->post('/', 'PinCodeController@fetchDetails');
+$router->post('/', 'PinCodeController@fetchDetailsUsingCommand');
+$router->post('/job-fetch', 'PinCodeController@fetchDetailsUsingJob');
