@@ -46,6 +46,35 @@ class FetchPinCodeDetails extends Command
         $pdo = DB::connection()->getPdo();
         $filePath = addslashes(public_path('pin_code.csv'));
 
+//        $sql = "CREATE TEMPORARY TABLE temporary_table SELECT * FROM pin_codes WHERE 1=0;";
+//
+//        $sql .= "LOAD DATA INFILE '$filePath'
+//                IGNORE
+//                INTO TABLE temporary_table
+//                CHARACTER SET latin1
+//                FIELDS TERMINATED BY ','
+//                ENCLOSED BY '\"'
+//                ESCAPED BY '\"'
+//                LINES TERMINATED BY ''
+//                IGNORE 1 lines
+//                (id,officename,pincode,officeType,Deliverystatus,divisionname,regionname,circlename,Taluk,Districtname,statename);";
+//
+//        $sql .= "SHOW COLUMNS FROM pin_codes;
+//                INSERT INTO pin_codes
+//                SELECT * FROM temporary_table
+//                ON DUPLICATE KEY UPDATE
+//                    officename = VALUES(officename),
+//                    pincode = VALUES(pincode),
+//                    officeType = VALUES(officeType),
+//                    Deliverystatus = VALUES(Deliverystatus),
+//                    divisionname = VALUES(divisionname),
+//                    regionname = VALUES(regionname),
+//                    circlename = VALUES(circlename),
+//                    Taluk = VALUES(Taluk),
+//                    statename = VALUES(statename);";
+//
+//        $sql .= "DROP TEMPORARY TABLE temporary_table;";
+
         $sql = "LOAD DATA LOCAL INFILE '$filePath'
                 REPLACE
                 INTO TABLE pin_codes
@@ -57,6 +86,7 @@ class FetchPinCodeDetails extends Command
                 IGNORE 1 lines
                 (officename,pincode,officeType,Deliverystatus,divisionname,regionname,circlename,Taluk,Districtname,statename)
                 SET created_at=NOW(),updated_at=NOW();";
+
         $pdo->exec($sql);
         $this->info('Data has been Processed');
         unlink($filePath);//Remove temp file
