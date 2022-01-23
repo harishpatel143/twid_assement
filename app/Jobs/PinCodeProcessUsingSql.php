@@ -1,50 +1,31 @@
 <?php
-namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+namespace App\Jobs;
+
+use App\Models\PinCode;
+use Illuminate\Bus\Batchable;
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class FetchPinCodeDetails extends Command
+class PinCodeProcessUsingSql extends Job
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'pincode:fetch';
+    use Batchable, InteractsWithQueue,Queueable, SerializesModels;
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Fetch Pin Code data from URL and store in CSV file. After storing insert into database';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
-        parent::__construct();
+        //
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $url = 'http://data.gov.in/sites/default/files/all_india_pin_code.csv';
-        $filePath = storage_path('pin_code.csv');
+        $filePath = public_path('pin_code.csv');
         $contents = file_get_contents($url);
         file_put_contents($filePath, $contents);
-        $this->info('Stored details in temp file');
-
         $pdo = DB::connection()->getPdo();
-        $filePath = addslashes(public_path('pin_code.csv'));
+        $filePath = addslashes($filePath);
 
 //        $sql = "CREATE TEMPORARY TABLE temporary_table SELECT * FROM pin_codes WHERE 1=0;";
 //
@@ -88,7 +69,6 @@ class FetchPinCodeDetails extends Command
                 SET created_at=NOW(),updated_at=NOW();";
 
         $pdo->exec($sql);
-        $this->info('Data has been Processed');
         unlink($filePath);//Remove temp file
     }
 }

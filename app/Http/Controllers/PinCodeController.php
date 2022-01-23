@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Events\FetchDataEvent;
 use App\Events\FetchDataUsingCommandEvent;
+use App\Jobs\Job;
+use App\Jobs\PinCodeProcessUsingSql;
 use App\Models\PinCode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Artisan;
 use Yajra\Datatables\DataTables;
 
 /**
@@ -45,7 +48,7 @@ class PinCodeController extends Controller
      * @return JsonResponse
      */
     public function fetchDetailsUsingCommand() {
-        event(new FetchDataUsingCommandEvent());
+        dispatch(new PinCodeProcessUsingSql);
 
         return response()->json([
             'status' => Response::HTTP_OK,
