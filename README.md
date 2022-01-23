@@ -43,12 +43,13 @@ Serve Application in new terminal or create virtual host
 2. Using Eloquent Job Batching (Slow, inserted 1000 record in every batch. Added check for duplicate records).
     Need to run `php artisan queue:work` for this option
  
-#### Using command Line : 
+#### Using sql Job Line : 
 Call below endpoint with `POST` method from Postman
 
     http://localhost:8000/
     
 #### Using Lumen Job Batching :
+Call below endpoint with `POST` method from Postman
     
     http://localhost:8000/job-fetch
     
@@ -62,6 +63,10 @@ After processing, you will able to see listing in web browser using below url.
 If you face any issue related security while fetch from command. Set you mysql ini config as below.
 
     secure_file_priv=""
+    
+Uncomment below line in `php.ini`
+
+    allow_local_infile=on
     
     
 ## Security Vulnerabilities
